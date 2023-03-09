@@ -1,5 +1,4 @@
 <?php
-
 namespace App\Http\Controllers;
 
 use App\Models\Input;
@@ -17,30 +16,40 @@ use OpenApi\Annotations as OA;
 
 class ApiController extends Controller
 {
-    public function emailGenerator(Request $request){
+    public function emailGenerator(Request $request)
+    {
         // Get data from the request url
-        $data=$request->all();
+        $data = $request->all();
         foreach ($data as $key => $d) {
-            if ($key!="expression"){
+            if ($key != "expression") {
                 $$key = new Input(htmlspecialchars($d));
-            }else{
-                $$key=$d;
+            } else {
+                $$key = $d;
             }
         }
         // Extract data in named variables
-        $exp=(str_replace('~','.',$expression));
+        $exp = (str_replace('~', '.', $expression));
 
-        $output=eval("return $exp;");
+        $output = eval("return $exp;");
+
+
+        //Alternative code for remplacing eval function
+        /**
+        $evaluate = function() use ($exp) {
+        return eval("return $exp;");
+        };
+        $output = $evaluate();
+         **/
 
         return json_encode(
             [
-           'data'=>[
-                   [
-                   'id'=>$output,
-                   'value'=>$output
-               ]
-           ]
-        ]
+                'data' => [
+                    [
+                        'id' => $output,
+                        'value' => $output
+                    ]
+                ]
+            ]
         );
     }
 }
