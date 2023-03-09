@@ -1,0 +1,15 @@
+version: "3"
+
+services:
+  nginx:
+    build:
+      context: ./nginx
+      dockerfile: Dockerfile
+    depends_on:
+      - eclipse-temurin
+
+
+  eclipse-temurin:
+    build:
+      context: ./eclipse
+      dockerfile: Dockerfile

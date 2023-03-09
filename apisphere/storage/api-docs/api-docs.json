@@ -1,0 +1,104 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+        "title": "Email generator",
+        "description": "API for generating emails from inputs",
+        "version": "1.0.0"
+    },
+    "paths": {
+        "/api/v1.0/emails-generator": {
+            "get": {
+                "summary": "Email generation",
+                "description": "Generate Email from inputs based on expression",
+                "parameters": [
+                    {
+                        "name": "input1",
+                        "in": "query",
+                        "description": "input1",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "input2",
+                        "in": "query",
+                        "description": "input2",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "input3",
+                        "in": "query",
+                        "description": "input3",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "input4",
+                        "in": "query",
+                        "description": "input4",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "input5",
+                        "in": "query",
+                        "description": "input5",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "input6",
+                        "in": "query",
+                        "description": "input6",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "expression",
+                        "in": "query",
+                        "description": "expression",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Generated email from input and expressions",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "data": {
+                                            "type": "array",
+                                            "items": {
+                                                "properties": {
+                                                    "id": {
+                                                        "type": "string",
+                                                        "example": "jl.mMignard@external.peoplespheres.fr"
+                                                    },
+                                                    "value": {
+                                                        "type": "string",
+                                                        "example": "jl.mMignard@external.peoplespheres.fr"
+                                                    }
+                                                },
+                                                "type": "object"
+                                            }
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
