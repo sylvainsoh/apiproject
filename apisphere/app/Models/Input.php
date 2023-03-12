@@ -2,41 +2,74 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
-
-class Input extends Model
+class Input
 {
+    /**
+     * Content of the input
+     * 
+     * @var string
+     */
+    private string $content;
 
-    private $content;
-
-    public function __construct($content)
+    /**
+     * Constructor
+     * 
+     * @param string $content
+     */
+    public function __construct(string $content)
     {
         $this->content = $content;
-        parent::__construct();
     }
 
-    public function eachWordFirstChars($number)
+    /**
+     * 
+     * 
+     * @param int $number
+     * @return Input
+     */
+    public function eachWordFirstChars(int $number): Input
     {
         $textTab = explode('-', $this->content);
-        $output = '';
+        $newContent = '';
         foreach ($textTab as $str) {
-            $output .= strtolower(substr($str, 0, $number));
+            $newContent .= strtolower(substr($str, 0, $number));
         }
-        return $output;
+        
+        //Update content
+        $this->content = $newContent;
+        
+        return $this;
     }
 
-    public function wordsCount()
+    /**
+     * Count the words of the content
+     * 
+     * @return int
+     */
+    public function wordsCount(): int
     {
         return str_word_count($this->content);
     }
 
-    public function lastWords()
+    /**
+     * Get the last words of the content
+     * 
+     * @return Input
+     */
+    public function lastWords(): Input
     {
         $textTab=explode(' ',$this->content);
-        return new Input($textTab[count($textTab)-1]);
+        
+        $this->content = $textTab[count($textTab)-1];
+        
+        return $this;
     }
 
+    /**
+     * Override
+     * 
+     * @return string
+     */
     public function __toString()
     {
         return $this->content;

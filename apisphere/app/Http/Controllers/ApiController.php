@@ -1,9 +1,7 @@
 <?php
 namespace App\Http\Controllers;
 
-use App\Models\Input;
-use Illuminate\Http\Request;
-use OpenApi\Annotations as OA;
+use App\Models\ExpressionHandler;
 
 /**
  * @OA\Info(
@@ -16,40 +14,25 @@ use OpenApi\Annotations as OA;
 
 class ApiController extends Controller
 {
-    public function emailGenerator(Request $request)
+    public function emailGenerator(\App\Http\Requests\EmailGeneratorRequest $request)
     {
         // Get data from the request url
-        $data = $request->all();
-        foreach ($data as $key => $d) {
-            if ($key != "expression") {
-                $$key = new Input(htmlspecialchars($d));
-            } else {
-                $$key = $d;
-            }
+        $data = $request->validated();
+
+        //Get inputs
+        $inputs = $data['inputs'];
+
+        //Handle expression
+        $expressionHandler = new ExpressionHandler($inputs, $data['expression']);
+        try {
+            $result = $expressionHandler->getResult();
+        } catch (\Exception $ex) {
+            throw new \Illuminate\Http\Exceptions\HttpResponseException(response()->json([
+                'error' => $ex->getMessage(),
+            ], \Illuminate\Http\Response::HTTP_UNPROCESSABLE_ENTITY));
         }
-        // Extract data in named variables
-        $exp = (str_replace('~', '.', $expression));
 
-        $output = eval("return $exp;");
-
-
-        //Alternative code for remplacing eval function
-        /**
-        $evaluate = function() use ($exp) {
-        return eval("return $exp;");
-        };
-        $output = $evaluate();
-         **/
-
-        return json_encode(
-            [
-                'data' => [
-                    [
-                        'id' => $output,
-                        'value' => $output
-                    ]
-                ]
-            ]
-        );
+        dump($result);
+        exit();
     }
 }
