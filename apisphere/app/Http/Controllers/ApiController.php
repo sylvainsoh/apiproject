@@ -1,6 +1,7 @@
 <?php
 namespace App\Http\Controllers;
 
+use App\Http\Requests\EmailGeneratorRequest;
 use App\Models\ExpressionHandler;
 use OpenApi\Annotations as OA;
 
@@ -10,12 +11,11 @@ use OpenApi\Annotations as OA;
  *      title="Email generator",
  *      description="API for generating emails from inputs"
  * )
- *
  */
 
 class ApiController extends Controller
 {
-    public function emailGenerator(\App\Http\Requests\EmailGeneratorRequest $request)
+    public function emailGenerator(EmailGeneratorRequest $request)
     {
         // Get data from the request url
         $data = $request->validated();

@@ -21,7 +21,8 @@ class ExpressionHandler
     /**
      * Constructor
      *
-     * @param string $content
+     * @param array $data
+     * @param string $expression
      */
     public function __construct(array $data, string $expression)
     {
@@ -63,7 +64,6 @@ class ExpressionHandler
         foreach ($matches[1] as $key => $inputName) {
             //Get content from request param
             $content = $this->data[str_replace('$', '', $inputName)];
-
             //Build input
             $input = new \App\Models\Input($content);
 

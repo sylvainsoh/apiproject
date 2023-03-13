@@ -3,6 +3,9 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Http\Exceptions\HttpResponseException;
+use Illuminate\Http\Response;
+use Psy\Exception\ErrorException;
 
 class EmailGeneratorRequest extends FormRequest
 {
@@ -11,7 +14,7 @@ class EmailGeneratorRequest extends FormRequest
      *
      * @return bool
      */
-    public function authorize()
+    public function authorize(): bool
     {
         return true;
     }
@@ -21,7 +24,7 @@ class EmailGeneratorRequest extends FormRequest
      *
      * @return array<string, mixed>
      */
-    public function rules()
+    public function rules(): array
     {
         return [
             'expression' => 'required|string'
@@ -33,9 +36,9 @@ class EmailGeneratorRequest extends FormRequest
      *
      * @param string $key
      * @param string $default
-     * @return void
+     * @return array
      */
-    public function validated($key = null, $default = null)
+    public function validated($key = null, $default = null): array
     {
         //Parent validator
         $data = parent::validated($key, $default);
@@ -59,7 +62,7 @@ class EmailGeneratorRequest extends FormRequest
      * @param array $inputs
      * @param string $expression
      * @return bool
-     * @throws \Illuminate\Http\Exceptions\HttpResponseException
+     * @throws HttpResponseException
      */
     private function validateExpressionInputs(array $inputs, string $expression): bool
     {
@@ -70,9 +73,9 @@ class EmailGeneratorRequest extends FormRequest
         //Check matches exist in inputs
         foreach ($matches[2] as $inputName) {
             if(!array_key_exists($inputName, $inputs)) {
-                throw new \Illuminate\Http\Exceptions\HttpResponseException(response()->json([
+                throw new HttpResponseException(response()->json([
                     'error' => $inputName . ' is used in the expression but not specified in the parameters',
-                ], \Illuminate\Http\Response::HTTP_UNPROCESSABLE_ENTITY));
+                ], Response::HTTP_UNPROCESSABLE_ENTITY));
             }
         }
 
@@ -85,17 +88,21 @@ class EmailGeneratorRequest extends FormRequest
      *
      * @param array $data
      * @return array
+     * @throws ErrorException
      */
     private function getInputs(array $data): array
     {
         //Get inputs
         $inputs = [];
         foreach ($data as $key => $value) {
-            if(strpos($key, 'input') === 0) {
-                $inputs[$key] = $value;
+            if (isset($value)) {
+                if (str_starts_with($key, 'input')) {
+                    $inputs[$key] = $value;
+                }
+            } else {
+                throw new ErrorException('The field ' . $key . ' is empty');
             }
         }
-
         //Return
         return $inputs;
     }

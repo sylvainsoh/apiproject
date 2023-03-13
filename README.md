@@ -23,7 +23,7 @@ input1.eachWordFirstChars(1) ~ '.' ~ (input2.wordsCount() > 1 ? input2.lastWords
 ``` 
 The corresponding version in PHP is :
 ``` php
-$input1->eachWordFirstChars(1) . '.' . ($input2->wordsCount() > 1 ? $input2->lastWords(-1)->eachWordFirstChars(1) . $input2->lastWords(1) : $input2 ) . '@' . $input3 . '.' . $input4 . '.' . $input5
+$input1->eachWordFirstChars(1) ~ '.' ~ ($input2->wordsCount() > 1 ? $input2->lastWords('-1')->eachWordFirstChars(1) ~ $input2->lastWords(1) : $input2) ~ '@' ~ $input3 ~ '.' ~ $input4 ~ '.' ~ $input5;
 ``` 
 Question answer : The use of **eval()** function is not recommended due to performance and security issues
 
