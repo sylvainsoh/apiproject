@@ -2,6 +2,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\ExpressionHandler;
+use OpenApi\Annotations as OA;
 
 /**
  * @OA\Info(
@@ -24,6 +25,7 @@ class ApiController extends Controller
 
         //Handle expression
         $expressionHandler = new ExpressionHandler($inputs, $data['expression']);
+
         try {
             $result = $expressionHandler->getResult();
         } catch (\Exception $ex) {
@@ -32,7 +34,16 @@ class ApiController extends Controller
             ], \Illuminate\Http\Response::HTTP_UNPROCESSABLE_ENTITY));
         }
 
-        dump($result);
-        exit();
+        // Format return type
+        return json_encode(
+            [
+                'data' => [
+                    [
+                        'id' => $result,
+                        'value' => $result
+                    ]
+                ]
+            ]
+        );
     }
 }
